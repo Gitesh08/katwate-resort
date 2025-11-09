@@ -1,0 +1,774 @@
+/* Modal Overlay */
+.booking-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* Slightly darker for emphasis */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow-y: auto;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Modal Content */
+.booking-modal-content {
+  background: #fff;
+  border-radius: 12px;
+  max-width: 900px;
+  width: 90%;
+  max-height: 90vh;
+  position: relative;
+  margin: 20px auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Close Button */
+.close-modal-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  z-index: 10;
+}
+
+.close-modal-btn:hover {
+  color: #ea4335; /* Red on hover, matches your error color */
+}
+
+/* Ensure body doesn't scroll when modal is open */
+body.modal-open {
+  overflow: hidden !important;
+  height: 100vh;
+  position: fixed;
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+  padding: 0 15px;
+  box-sizing: border-box;
+}
+
+/* Form container and layout */
+.booking-form {
+  margin: 40px 0;
+  position: relative;
+  z-index: 10;
+}
+
+.form-container {
+  background-color: transparent;
+  border-radius: 12px;
+  padding: 30px;
+  font-family: "Google Sans", sans-serif;
+  position: relative;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.form-container h2 {
+  margin-bottom: 5px;
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.form-subtitle {
+  color: #777;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Form row layout styles */
+.form-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.date-time-row {
+  gap: 30px;
+  justify-content: space-between;
+}
+
+.date-row {
+  gap: 15px;
+  justify-content: space-between;
+}
+
+.date-group,
+.time-group {
+  flex: 0.48;
+}
+
+.form-group {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+.full-width {
+  flex: 100%;
+  width: 100%;
+  max-width: 95%;
+  margin: 0 auto;
+}
+
+.date-group {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Form elements styling */
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: "Google Sans", sans-serif;
+  color: #333;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  background-color: #f9f9f9;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #4285f4;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.15);
+  background-color: white;
+}
+
+.form-group textarea {
+  resize: none;
+}
+
+.form-group input.invalid,
+.form-group textarea.invalid {
+  border-color: #ea4335;
+  background-color: #fff8f8;
+}
+
+.error-message {
+  color: #ea4335;
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+/* Select styling */
+.form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: "Google Sans", sans-serif;
+  color: #333;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  background-color: #f9f9f9;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px top 50%;
+  background-size: 10px auto;
+  padding-right: 30px;
+}
+
+.form-group select:focus {
+  border-color: #4285f4;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.15);
+  background-color: white;
+}
+
+.form-group select.invalid {
+  border-color: #ea4335;
+  background-color: #fff8f8;
+}
+
+/* Number input styling */
+.number-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+  background-color: #f9f9f9;
+  height: 40px;
+}
+
+.number-input input {
+  border: none;
+  text-align: center;
+  width: 100%;
+  padding: 0;
+  background: transparent;
+  font-size: 1rem;
+  font-weight: 500;
+  appearance: textfield;
+}
+
+.number-input input::-webkit-inner-spin-button,
+.number-input input::-webkit-outer-spin-button {
+  appearance: none;
+}
+
+.number-input button {
+  width: 36px;
+  height: 100%;
+  background-color: #f5f5f5;
+  border: none;
+  color: #555;
+  font-size: 1.2rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.number-input button:not([disabled]):hover {
+  background-color: #e8e8e8;
+  color: #4285f4;
+}
+
+.number-input button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Button styling */
+.btn-book {
+  width: 100%;
+  background: #4285f4;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(66, 133, 244, 0.3);
+  height: 45px;
+  font-family: "Google Sans", sans-serif;
+}
+
+.btn-book:hover {
+  background: #3367d6;
+  transform: translateY(-1px);
+}
+
+.btn-book:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.popup-btn {
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: "Google Sans", sans-serif;
+}
+
+.popup-btn:hover {
+  background-color: #3367d6;
+}
+
+/* Date & Time picker styling */
+.date-picker-container,
+.time-picker-container {
+  position: relative;
+}
+
+.date-input-wrapper,
+.time-input-wrapper {
+  position: relative;
+  cursor: pointer;
+}
+
+.calendar-icon,
+.clock-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: #666;
+  pointer-events: none;
+}
+
+.calendar-dropdown,
+.time-dropdown {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  overflow: hidden;
+  animation: fadeDown 0.2s ease;
+}
+
+/* Fix for calendar when check-out date is shown */
+.calendar-dropdown {
+  max-width: 280px;
+}
+
+/* Calendar styling */
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #eee;
+}
+
+.month-year {
+  font-weight: 500;
+  color: #333;
+}
+
+.calendar-nav {
+  background: none;
+  border: none;
+  color: #4285f4;
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 5px 8px;
+  border-radius: 4px;
+}
+
+.calendar-nav:hover {
+  background: #e8f0fe;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.weekday-cell {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #777;
+  font-weight: 500;
+}
+
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 8px;
+}
+
+.calendar-day {
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  margin: 2px;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.calendar-day.selectable:hover {
+  background-color: #e8f0fe;
+  color: #4285f4;
+}
+
+.calendar-day.empty-day {
+  cursor: default;
+}
+
+.calendar-day.unselectable {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Time selector styling */
+.time-selector {
+  padding: 12px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.time-group {
+  margin-bottom: 15px;
+}
+
+.time-group:last-child {
+  margin-bottom: 0;
+}
+
+.time-group-label {
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.time-slot-btn {
+  background: #f5f5f5;
+  border: none;
+  padding: 8px 0;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #333;
+}
+
+.time-slot-btn:hover {
+  background: #e8f0fe;
+  color: #4285f4;
+}
+
+.time-slot-btn.selected {
+  background: #4285f4;
+  color: white;
+}
+
+/* Loading spinner */
+.loading-spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+/* Popup styles */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.popup-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease;
+}
+
+.popup-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.success-popup .popup-icon {
+  background-color: #34a853;
+  color: white;
+}
+
+.error-popup .popup-icon {
+  background-color: #ea4335;
+  color: white;
+}
+
+.popup-card h3 {
+  margin: 0 0 10px;
+  color: #333;
+  font-size: 1.3rem;
+}
+
+.popup-card p {
+  color: #666;
+  margin: 0 0 20px;
+  font-size: 0.95rem;
+}
+
+/* Animations */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 576px) {
+  .form-container {
+    padding: 20px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .date-time-row {
+    flex-direction: column;
+  }
+
+  .date-group,
+  .time-group {
+    width: 100%;
+  }
+
+  .form-group {
+    width: 100%;
+  }
+
+  .btn-book {
+    height: 42px;
+  }
+
+  .time-slots {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group select {
+    font-size: 0.9rem;
+  }
+}
+
+/* New layout styles */
+.booking-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .booking-layout {
+    flex-direction: row;
+  }
+
+  .booking-form-column {
+    flex: 1;
+    max-width: 60%;
+  }
+
+  .booking-summary-column {
+    flex: 1;
+    max-width: 40%;
+  }
+}
+
+/* AC Toggle Switch Styles */
+.ac-toggle-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+.ac-toggle-container span {
+  padding: 0 10px;
+  color: #666;
+  font-weight: 500;
+}
+.ac-toggle-container span.active {
+  color: #ff6b6b;
+  font-weight: 600;
+}
+.ac-toggle-switch {
+  position: relative;
+  width: 50px;
+  height: 24px;
+  background-color: #ccc;
+  border-radius: 12px;
+  margin: 0 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.ac-toggle-switch.active {
+  background-color: #ff6b6b;
+}
+.toggle-slider {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+.ac-toggle-switch.active .toggle-slider {
+  transform: translateX(26px);
+}
+
+/* Booking Summary Styles */
+.booking-summary-card {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+}
+.booking-summary-card h3 {
+  color: #333;
+  margin-top: 0;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: #555;
+}
+.summary-label {
+  font-weight: 500;
+}
+.summary-value {
+  text-align: right;
+}
+.summary-price {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px dashed #ddd;
+}
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  font-size: 0.95rem;
+}
+.price-row.total {
+  font-weight: 700;
+  color: #ff6b6b;
+  font-size: 1.1rem;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+}
+.summary-inclusions {
+  margin-top: 20px;
+}
+.summary-inclusions h4 {
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+}
+.summary-inclusions ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.summary-inclusions li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: #666;
+}
+.summary-inclusions li i {
+  margin-right: 8px;
+  color: #ff6b6b;
+  min-width: 16px;
+}
+.summary-notes {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #ddd;
+  font-size: 0.85rem;
+  color: #777;
+}
+.summary-notes p {
+  margin-bottom: 5px;
+}
+.summary-notes i {
+  margin-right: 5px;
+  color: #ff6b6b;
+}

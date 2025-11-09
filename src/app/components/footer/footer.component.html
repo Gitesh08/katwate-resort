@@ -1,0 +1,58 @@
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-info">
+        <div class="footer-logo">
+          <img src="/assets/images/logo.png" alt="Katwate's Resort Logo" />
+        </div>
+        <p>
+          Experience the perfect beachside getaway at Katwate's Resort, located
+          at the beautiful Kelva Beach.
+        </p>
+        <div class="footer-contact">
+          <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <span>{{ contactInfo.phone }}</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <span>{{ contactInfo.email }}</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>{{ contactInfo.address }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-nav">
+        <div class="footer-links">
+          <h3>Quick Links</h3>
+          <ul>
+            <li *ngFor="let link of navLinks">
+              <a [href]="link.url">{{ link.name }}</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-social">
+          <h3>Connect With Us</h3>
+          <div class="social-icons">
+            <a
+              *ngFor="let social of socialLinks"
+              [href]="social.url"
+              class="social-icon"
+              target="_blank"
+            >
+              <i class="fab {{ social.icon }}"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© {{ currentYear }} Katwate's Resort. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

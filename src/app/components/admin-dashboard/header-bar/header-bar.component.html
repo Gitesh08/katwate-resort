@@ -1,0 +1,26 @@
+<header class="header-bar">
+  <div class="header-logo">
+    <span class="material-icons menu-icon" (click)="onToggleSidebar()"
+      >menu</span
+    >
+    <span>Katwate's Resort</span>
+  </div>
+  <div class="search-bar">
+    <span class="material-icons">search</span>
+    <input type="text" placeholder="Booking number or guest" />
+  </div>
+  <div class="header-actions">
+    <div class="icon-button">
+      <span class="material-icons">notifications</span>
+    </div>
+    <div class="user-profile" *ngIf="userInfo.name && userInfo.role">
+      <div class="avatar">
+        <span>{{ getInitials(userInfo.name) }}</span>
+      </div>
+      <div class="user-info">
+        <div class="user-role">{{ userInfo.role }}</div>
+        <div class="user-name">{{ userInfo.name }}</div>
+      </div>
+    </div>
+  </div>
+</header>

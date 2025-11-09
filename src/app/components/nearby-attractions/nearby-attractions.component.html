@@ -1,0 +1,23 @@
+<section class="nearby-attractions" id="attractions">
+  <div class="container">
+    <div class="section-header">
+      <h2>Nearby Attractions</h2>
+      <p>Explore these beautiful places just minutes away from our resort</p>
+    </div>
+
+    <div class="attractions-grid">
+      <div class="attraction-card" *ngFor="let attraction of attractions">
+        <div class="attraction-image">
+          <img [src]="attraction.image" [alt]="attraction.name" />
+          <div class="attraction-distance">
+            <i class="fas fa-walking"></i> {{ attraction.distance }}
+          </div>
+        </div>
+        <div class="attraction-info">
+          <h3>{{ attraction.name }}</h3>
+          <p>{{ attraction.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

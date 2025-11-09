@@ -1,0 +1,70 @@
+<section class="reviews" id="reviews">
+  <div class="reviews-background">
+    <div class="container">
+      <div class="section-header">
+        <h2>Guest Experiences</h2>
+        <p>What our guests say about their stay</p>
+      </div>
+
+      <div class="reviews-container">
+        <div class="reviews-quote-icon">
+          <i class="fas fa-quote-left"></i>
+        </div>
+
+        <div class="reviews-slider">
+          <div class="reviews-track" [style.transform]="getTransformStyle()">
+            <div class="review-slide" *ngFor="let review of reviews">
+              <div class="review-content">
+                <div class="review-header">
+                  <div class="review-avatar">
+                    <img [src]="review.avatar" [alt]="review.name" />
+                  </div>
+                  <div class="review-meta">
+                    <h3 class="review-name">{{ review.name }}</h3>
+                    <div class="review-rating">
+                      <i
+                        class="fas fa-star"
+                        *ngFor="let star of getStars(review.rating)"
+                      ></i>
+                      <i
+                        class="far fa-star"
+                        *ngFor="let star of getEmptyStars(review.rating)"
+                      ></i>
+                    </div>
+                    <div class="review-source">
+                      <span class="review-date">{{ review.date }}</span>
+                      <span class="review-platform"
+                        >via {{ review.source }}</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="review-text">
+                  <p>{{ review.text }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reviews-controls">
+          <button class="review-control prev" (click)="prevReview()">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <div class="review-indicators">
+            <span
+              *ngFor="let review of reviews; let i = index"
+              class="indicator"
+              [class.active]="i === activeIndex"
+              (click)="setActiveReview(i)"
+            >
+            </span>
+          </div>
+          <button class="review-control next" (click)="nextReview()">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

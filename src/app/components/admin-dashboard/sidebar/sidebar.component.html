@@ -1,0 +1,14 @@
+<aside class="sidebar" [ngClass]="{ collapsed: collapsed }">
+  <nav class="nav-links">
+    <a
+      *ngFor="let item of navItems"
+      href="#"
+      class="nav-item"
+      [class.active]="activeTab === item.id"
+      (click)="setActiveTab(item.id)"
+    >
+      <span class="material-icons">{{ item.icon }}</span>
+      <span class="nav-label">{{ item.label }}</span>
+    </a>
+  </nav>
+</aside>

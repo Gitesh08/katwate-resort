@@ -1,0 +1,37 @@
+<div class="login-wrapper">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-card">
+    <h2><span class="material-icons">lock</span> Admin Login</h2>
+
+    <label>Email</label>
+    <input
+      formControlName="email"
+      placeholder="Enter your email"
+      type="email"
+    />
+
+    <label>Password</label>
+    <div class="password-wrapper">
+      <input
+        [type]="showPassword ? 'text' : 'password'"
+        formControlName="password"
+        placeholder="Enter password"
+      />
+      <span
+        class="material-icons visibility-toggle"
+        (click)="togglePasswordVisibility()"
+      >
+        {{ showPassword ? "visibility_off" : "visibility" }}
+      </span>
+    </div>
+
+    <button type="submit" [disabled]="loginInProgress">Login</button>
+
+    <a class="forgot-password" (click)="resetPassword()">Forgot password?</a>
+  </form>
+</div>
+
+<!-- Popup Modal -->
+<div *ngIf="popupMessage" class="popup-modal" [ngClass]="popupType">
+  <span class="popup-close" (click)="closePopup()">×</span>
+  {{ popupMessage }}
+</div>

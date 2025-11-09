@@ -1,0 +1,32 @@
+<app-hero></app-hero>
+<app-about></app-about>
+<app-video-section></app-video-section>
+<app-gallery></app-gallery>
+<app-tariffs></app-tariffs>
+<!-- <app-event-booking></app-event-booking> -->
+<app-reviews></app-reviews>
+<app-location></app-location>
+<app-booking-form></app-booking-form>
+<app-nearby-attractions></app-nearby-attractions>
+<app-faq-section></app-faq-section>
+
+<!-- Floating Contact Button -->
+<div class="contact-button-container">
+  <button class="contact-main-btn" (click)="toggleContactOptions()">
+    <i class="fas fa-comment-alt"></i>
+  </button>
+  <div class="contact-options" [ngClass]="{ show: showContactOptions }">
+    <a href="mailto:example@email.com" class="contact-option email">
+      <i class="fas fa-envelope"></i>
+      <span class="option-label">Email</span>
+    </a>
+    <a href="tel:+1234567890" class="contact-option phone">
+      <i class="fas fa-phone"></i>
+      <span class="option-label">Phone</span>
+    </a>
+    <a href="https://wa.me/1234567890" class="contact-option whatsapp">
+      <i class="fab fa-whatsapp"></i>
+      <span class="option-label">WhatsApp</span>
+    </a>
+  </div>
+</div>

@@ -1,0 +1,367 @@
+<div class="dashboard-container">
+  <app-sidebar
+    [activeTab]="activeTab"
+    [collapsed]="sidebarCollapsed"
+    (tabChange)="activeTab = $event"
+  >
+  </app-sidebar>
+  <app-header-bar
+    [userInfo]="userInfo"
+    [currentDate]="currentDate"
+    (toggleSidebar)="toggleSidebar()"
+  >
+  </app-header-bar>
+  <main
+    class="main-content"
+    [ngClass]="{ 'sidebar-collapsed': sidebarCollapsed }"
+  >
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Guests Data Center</h1>
+        <p class="page-subtitle">Welcome to Katwate's Resort Dashboard</p>
+      </div>
+      <div class="filters">
+        <div class="date-filter">
+          <span>{{ currentDate }}</span>
+          <span class="material-icons">arrow_drop_down</span>
+        </div>
+        <div class="filter-button">
+          <span class="material-icons">filter_list</span>
+          <span>Filter</span>
+        </div>
+        <button class="add-button" (click)="openAddStaffModal()">
+          <span class="material-icons">add</span>
+          <span>Add Staff</span>
+        </button>
+        <button class="add-button" (click)="openAddGuestModal()">
+          <span class="material-icons">add</span>
+          <span>Add Guest</span>
+        </button>
+        <button class="add-button" (click)="exportGuests()">
+          <span class="material-icons">download</span>
+          <span>Export CSV</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Summary Metrics -->
+    <div class="summary-metrics">
+      <div class="metric-card">
+        <h3>{{ summaryMetrics.checkIns }}</h3>
+        <p>Check-Ins Today</p>
+      </div>
+      <div class="metric-card">
+        <h3>{{ summaryMetrics.checkOuts }}</h3>
+        <p>Check-Outs Today</p>
+      </div>
+      <div class="metric-card">
+        <h3>{{ summaryMetrics.pending }}</h3>
+        <p>Pending Bookings</p>
+        <span class="notification" *ngIf="summaryMetrics.pending > 0"
+          >Action Needed</span
+        >
+      </div>
+      <div class="metric-card">
+        <h3>
+          {{
+            roomAvailability.single +
+              roomAvailability.double +
+              roomAvailability.suite
+          }}
+        </h3>
+        <p>Rooms Available</p>
+        <span class="room-details">
+          Single: {{ roomAvailability.single }} | Double:
+          {{ roomAvailability.double }} | Suite: {{ roomAvailability.suite }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Calendar and Chart Container -->
+    <div class="calendar-chart-container">
+      <!-- Monthly Calendar -->
+      <div class="calendar-container">
+        <div class="calendar-header">
+          <button (click)="changeMonth(-1)" class="calendar-nav">
+            <span class="material-icons">chevron_left</span>
+          </button>
+          <h3>{{ currentMonth + 1 }}/{{ currentYear }}</h3>
+          <button (click)="changeMonth(1)" class="calendar-nav">
+            <span class="material-icons">chevron_right</span>
+          </button>
+        </div>
+        <div class="calendar">
+          <div class="calendar-day header">Sun</div>
+          <div class="calendar-day header">Mon</div>
+          <div class="calendar-day header">Tue</div>
+          <div class="calendar-day header">Wed</div>
+          <div class="calendar-day header">Thu</div>
+          <div class="calendar-day header">Fri</div>
+          <div class="calendar-day header">Sat</div>
+          <div
+            *ngFor="let day of calendarDays"
+            class="calendar-day"
+            [class.booked]="day.booked"
+          >
+            {{ day.day }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Monthly Bookings Graph -->
+      <div class="chart-container">
+        <h3>Bookings by Month ({{ currentYear }})</h3>
+        <!-- <canvas
+          baseChart
+          [data]="barChartData"
+          [options]="barChartOptions"
+          type="bar"
+        >
+        </canvas> -->
+        <div class="chart-legend">
+          <div class="legend-item">
+            <span class="legend-color" style="background-color: #0d6efd"></span>
+            <span>Number of bookings per month</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Guest Table -->
+    <app-guest-table
+      (viewGuest)="openGuestPreviewModal($event)"
+      (editGuest)="openAddGuestModal($event)"
+      (sendReminder)="sendReminder($event)"
+    >
+    </app-guest-table>
+
+    <!-- Add Staff Modal -->
+    <div class="modal-backdrop" *ngIf="showAddStaffModal">
+      <div class="modal">
+        <h2>Add New Staff</h2>
+        <form (ngSubmit)="addStaff(staffForm)" #staffForm="ngForm">
+          <div class="form-group">
+            <label>Name</label>
+            <input
+              type="text"
+              placeholder="Full Name"
+              name="name"
+              [(ngModel)]="newStaff.name"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input
+              type="email"
+              placeholder="Email"
+              name="email"
+              [(ngModel)]="newStaff.email"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Role</label>
+            <select name="role" [(ngModel)]="newStaff.role" required>
+              <option value="" disabled selected>Select Role</option>
+              <option>Receptionist</option>
+              <option>Manager</option>
+              <option>Cleaner</option>
+            </select>
+          </div>
+          <div class="modal-actions">
+            <button
+              type="button"
+              class="popup-btn cancel-btn"
+              (click)="closeAddStaffModal()"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="popup-btn"
+              [disabled]="staffForm.invalid"
+            >
+              Add
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Add Guest Modal -->
+    <div class="modal-backdrop" *ngIf="showAddGuestModal">
+      <div class="modal modal-landscape form-container">
+        <div class="form-header">
+          <h2>{{ newGuest.id ? "Edit Guest" : "Add New Guest" }}</h2>
+          <p class="form-subtitle">Fill in the guest details below</p>
+        </div>
+        <form
+          (ngSubmit)="addGuest(guestForm)"
+          #guestForm="ngForm"
+          class="form-landscape"
+        >
+          <div class="form-column">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input
+                type="text"
+                placeholder="Enter full name"
+                name="name"
+                [(ngModel)]="newGuest.name"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input
+                type="email"
+                placeholder="Enter email"
+                name="email"
+                [(ngModel)]="newGuest.email"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Mobile Number</label>
+              <input
+                type="tel"
+                placeholder="Enter mobile number"
+                name="mobile"
+                [(ngModel)]="newGuest.mobile"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Room Type</label>
+              <select name="roomType" [(ngModel)]="newGuest.roomType" required>
+                <option value="" disabled selected>Select Room Type</option>
+                <option>Single Room</option>
+                <option>Double Room</option>
+                <option>Suite</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Room Number</label>
+              <input
+                type="text"
+                placeholder="Enter room number"
+                name="roomNumber"
+                [(ngModel)]="newGuest.roomNumber"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Number of Guests</label>
+              <input
+                type="number"
+                placeholder="Enter number of guests"
+                name="numberOfGuests"
+                [(ngModel)]="newGuest.numberOfGuests"
+                min="1"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-column">
+            <div class="form-group">
+              <label>Check In</label>
+              <input
+                type="date"
+                name="checkIn"
+                [(ngModel)]="newGuest.checkIn"
+                [min]="currentDate"
+                required
+                (change)="updateCheckOutMin()"
+              />
+            </div>
+            <div class="form-group">
+              <label>Check Out</label>
+              <input
+                type="date"
+                name="checkOut"
+                [(ngModel)]="newGuest.checkOut"
+                [min]="minCheckOutDate"
+              />
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select name="status" [(ngModel)]="newGuest.status" required>
+                <option value="" disabled selected>Select Status</option>
+                <option>Confirmed</option>
+                <option>Checked In</option>
+                <option>Checked Out</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>ID Type</label>
+              <select name="idType" [(ngModel)]="newGuest.idType" required>
+                <option value="" disabled selected>Select ID Type</option>
+                <option>Passport</option>
+                <option>Driver License</option>
+                <option>National ID</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>ID Number</label>
+              <input
+                type="text"
+                placeholder="Enter ID number"
+                name="idNumber"
+                [(ngModel)]="newGuest.idNumber"
+                required
+              />
+            </div>
+          </div>
+          <div class="modal-actions full-width">
+            <button
+              type="button"
+              class="popup-btn cancel-btn"
+              (click)="closeAddGuestModal()"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="popup-btn"
+              [disabled]="guestForm?.invalid"
+            >
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Guest Preview Modal -->
+    <div class="modal-backdrop" *ngIf="showGuestPreviewModal">
+      <div class="modal">
+        <h2>Guest Details</h2>
+        <div class="preview-content" *ngIf="previewGuest">
+          <p><strong>Name:</strong> {{ previewGuest.name }}</p>
+          <p><strong>Email:</strong> {{ previewGuest.email }}</p>
+          <p><strong>Mobile:</strong> {{ previewGuest.mobile }}</p>
+          <p><strong>Room Type:</strong> {{ previewGuest.roomType }}</p>
+          <p><strong>Room Number:</strong> {{ previewGuest.roomNumber }}</p>
+          <p>
+            <strong>Number of Guests:</strong> {{ previewGuest.numberOfGuests }}
+          </p>
+          <p><strong>Check In:</strong> {{ previewGuest.checkIn }}</p>
+          <p><strong>Check Out:</strong> {{ previewGuest.checkOut || "-" }}</p>
+          <p><strong>Status:</strong> {{ previewGuest.status }}</p>
+          <p><strong>ID Type:</strong> {{ previewGuest.idType }}</p>
+          <p><strong>ID Number:</strong> {{ previewGuest.idNumber }}</p>
+        </div>
+        <div class="modal-actions">
+          <button
+            type="button"
+            class="popup-btn cancel-btn"
+            (click)="closeGuestPreviewModal()"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

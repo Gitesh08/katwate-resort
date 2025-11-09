@@ -1,0 +1,201 @@
+/* video-section.component.css */
+.video-section {
+  padding: 60px 0;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  animation: fadeIn 1s ease-out;
+}
+
+.container {
+  width: 100%;
+  max-width: 1140px; /* Slightly reduced from 1200px */
+  margin: 0 auto;
+  padding: 0 15px; /* Consistent padding */
+  box-sizing: border-box;
+}
+
+.video-content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.video-text {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: "Google Sans", sans-serif;
+  animation: slideUp 0.7s ease-out;
+  width: 100%;
+  padding: 0 10px; /* Added padding for smaller screens */
+}
+
+.video-text h2 {
+  color: #ff6b00;
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  position: relative;
+  display: inline-block;
+}
+
+.video-text h2::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background-color: #ff6b00;
+  transition: width 0.3s ease;
+}
+
+.video-text:hover h2::after {
+  width: 80px;
+}
+
+.video-text p {
+  color: #666;
+  margin-top: 10px;
+  font-size: 1.1rem;
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+  height: 0;
+  overflow: hidden;
+  border-radius: 15px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: slideUp 0.9s ease-out;
+  margin: 0 auto; /* Center the container */
+  max-width: 100%; /* Ensure it doesn't exceed parent width */
+}
+
+.video-container:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  border: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(5deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 992px) {
+  .video-section {
+    padding: 50px 0;
+  }
+  .container {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .video-section {
+    padding: 40px 0;
+  }
+  .video-text h2 {
+    font-size: 2rem;
+  }
+  .video-text p {
+    font-size: 1rem;
+    padding: 0 10px;
+  }
+  .video-container {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    width: 95%; /* Slightly reduced width for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .video-section {
+    padding: 30px 0;
+  }
+  .container {
+    padding: 0 10px;
+  }
+  .video-text h2 {
+    font-size: 1.6rem;
+  }
+  .video-text p {
+    font-size: 0.9rem;
+    padding: 0 5px;
+  }
+  .video-container {
+    border-radius: 10px;
+    width: 92%; /* Further reduced for extra small screens */
+  }
+  .video-container iframe {
+    border-radius: 10px;
+  }
+}
+
+/* Additional breakpoint for very small devices (360px and below) */
+@media (max-width: 360px) {
+  .video-section {
+    padding: 25px 0;
+  }
+  .container {
+    padding: 0 8px;
+  }
+  .video-text h2 {
+    font-size: 1.6rem;
+  }
+  .video-text p {
+    font-size: 0.9rem;
+    padding: 0;
+  }
+  .video-container {
+    width: 100%;
+    margin: 0 auto;
+  }
+}

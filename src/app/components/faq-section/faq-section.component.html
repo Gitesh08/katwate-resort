@@ -1,0 +1,22 @@
+<section class="faq-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Frequently Asked Questions</h2>
+      <p>Find answers to the most common questions about Katwate's Resort</p>
+    </div>
+
+    <div class="faq-container">
+      <div class="faq-item" *ngFor="let faq of faqs; let i = index">
+        <div class="faq-question" (click)="toggleFAQ(i)">
+          <h3>{{ faq.question }}</h3>
+          <div class="faq-icon">
+            <i class="fa" [ngClass]="faq.isOpen ? 'fa-minus' : 'fa-plus'"></i>
+          </div>
+        </div>
+        <div class="faq-answer" [ngClass]="{ open: faq.isOpen }">
+          <p>{{ faq.answer }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

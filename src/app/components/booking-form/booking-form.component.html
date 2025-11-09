@@ -1,0 +1,572 @@
+<div
+  class="booking-modal-overlay"
+  *ngIf="isModalOpen"
+  (click)="handleOverlayClick($event)"
+>
+  <div class="booking-modal-content">
+    <button
+      class="close-modal-btn"
+      (click)="closeModal()"
+      aria-label="Close booking modal"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+
+    <div class="container">
+      <div class="form-container">
+        <div class="form-header">
+          <h2>Book Your Experience</h2>
+          <p class="form-subtitle" *ngIf="selectedRoom">
+            {{ selectedRoom.name }} - {{ bookingSummary.packageType }}
+          </p>
+        </div>
+
+        <!-- Two column layout: Form and Summary -->
+        <div class="booking-layout">
+          <!-- Form Column -->
+          <div class="booking-form-column">
+            <form [formGroup]="bookingForm" (ngSubmit)="sendToWhatsApp()">
+              <!-- Package Type and Room Type -->
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="package-type">Package Type</label>
+                  <select
+                    id="package-type"
+                    formControlName="packageType"
+                    (change)="onPackageTypeChange()"
+                    [class.invalid]="
+                      bookingForm.get('packageType')?.invalid &&
+                      bookingForm.get('packageType')?.touched
+                    "
+                  >
+                    <option
+                      *ngFor="let type of packageTypes"
+                      [value]="type.value"
+                    >
+                      {{ type.label }}
+                    </option>
+                  </select>
+                  <div
+                    class="error-message"
+                    *ngIf="
+                      bookingForm.get('packageType')?.invalid &&
+                      bookingForm.get('packageType')?.touched
+                    "
+                  >
+                    Please select a package type
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="room-type">Room Type</label>
+                  <select
+                    id="room-type"
+                    formControlName="roomType"
+                    (change)="onRoomTypeChange()"
+                    [class.invalid]="
+                      bookingForm.get('roomType')?.invalid &&
+                      bookingForm.get('roomType')?.touched
+                    "
+                  >
+                    <option
+                      *ngFor="let room of getAvailableRoomTypes()"
+                      [value]="room.value"
+                    >
+                      {{ room.label }}
+                    </option>
+                  </select>
+                  <div
+                    class="error-message"
+                    *ngIf="
+                      bookingForm.get('roomType')?.invalid &&
+                      bookingForm.get('roomType')?.touched
+                    "
+                  >
+                    Please select a room type
+                  </div>
+                </div>
+              </div>
+
+              <!-- AC/Non-AC toggle -->
+              <div class="form-row" *ngIf="selectedRoomDetails?.hasACOption">
+                <div class="form-group full-width ac-toggle-group">
+                  <label>Room Option</label>
+                  <div class="ac-toggle-container">
+                    <span
+                      class="toggle-label"
+                      [class.active]="!bookingForm.get('acOption')?.value"
+                      (click)="toggleAcOption()"
+                    >
+                      Non-AC
+                    </span>
+                    <div
+                      class="ac-toggle-switch"
+                      [class.active]="bookingForm.get('acOption')?.value"
+                      (click)="toggleAcOption()"
+                    >
+                      <span class="toggle-slider"></span>
+                    </div>
+                    <span
+                      class="toggle-label"
+                      [class.active]="bookingForm.get('acOption')?.value"
+                      (click)="toggleAcOption()"
+                    >
+                      AC
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Date Inputs -->
+              <div
+                class="form-row date-row"
+                *ngIf="bookingForm.get('packageType')?.value !== 'event'"
+              >
+                <div class="form-group date-group">
+                  <label for="check-in">{{
+                    isNightPackage() ? "Check-in Date" : "Date"
+                  }}</label>
+                  <div class="date-picker-container">
+                    <div
+                      class="date-input-wrapper"
+                      (click)="toggleCalendar('checkIn')"
+                    >
+                      <input
+                        type="text"
+                        id="check-in"
+                        [value]="formatSelectedDate('checkIn')"
+                        readonly
+                        required
+                        [class.invalid]="
+                          bookingForm.get('checkInDate')?.invalid &&
+                          bookingForm.get('checkInDate')?.touched
+                        "
+                      />
+                      <span class="calendar-icon"
+                        ><i class="fas fa-calendar-alt"></i
+                      ></span>
+                    </div>
+
+                    <!-- Calendar dropdown for check-in -->
+                    <div class="calendar-dropdown" *ngIf="showCheckInCalendar">
+                      <div class="calendar-header">
+                        <button
+                          type="button"
+                          class="calendar-nav"
+                          (click)="navigateMonth(-1)"
+                        >
+                          &#9664;
+                        </button>
+                        <span class="month-year">{{
+                          getMonthYearString()
+                        }}</span>
+                        <button
+                          type="button"
+                          class="calendar-nav"
+                          (click)="navigateMonth(1)"
+                        >
+                          &#9654;
+                        </button>
+                      </div>
+                      <div class="calendar-weekdays">
+                        <div class="weekday-cell" *ngFor="let day of weekdays">
+                          {{ day }}
+                        </div>
+                      </div>
+                      <div class="calendar-days">
+                        <div
+                          *ngFor="
+                            let day of getDaysInMonth(
+                              currentMonth.getFullYear(),
+                              currentMonth.getMonth()
+                            )
+                          "
+                          class="calendar-day"
+                          [class.empty-day]="day === 0"
+                          [class.selectable]="isDateSelectable(day)"
+                          [class.unselectable]="
+                            !isDateSelectable(day) && day !== 0
+                          "
+                          (click)="selectDate('checkIn', day)"
+                        >
+                          {{ day !== 0 ? day : "" }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="error-message"
+                    *ngIf="
+                      bookingForm.get('checkInDate')?.invalid &&
+                      bookingForm.get('checkInDate')?.touched
+                    "
+                  >
+                    Please select a
+                    {{ isNightPackage() ? "check-in" : "" }} date
+                  </div>
+                </div>
+
+                <div class="form-group date-group" *ngIf="isNightPackage()">
+                  <label for="check-out">Check-out Date</label>
+                  <div class="date-picker-container">
+                    <div
+                      class="date-input-wrapper"
+                      (click)="toggleCalendar('checkOut')"
+                    >
+                      <input
+                        type="text"
+                        id="check-out"
+                        [value]="formatSelectedDate('checkOut')"
+                        readonly
+                        required
+                        [class.invalid]="
+                          bookingForm.get('checkOutDate')?.invalid &&
+                          bookingForm.get('checkOutDate')?.touched
+                        "
+                      />
+                      <span class="calendar-icon"
+                        ><i class="fas fa-calendar-alt"></i
+                      ></span>
+                    </div>
+
+                    <!-- Calendar dropdown for check-out -->
+                    <div class="calendar-dropdown" *ngIf="showCheckOutCalendar">
+                      <div class="calendar-header">
+                        <button
+                          type="button"
+                          class="calendar-nav"
+                          (click)="navigateMonth(-1)"
+                        >
+                          &#9664;
+                        </button>
+                        <span class="month-year">{{
+                          getMonthYearString()
+                        }}</span>
+                        <button
+                          type="button"
+                          class="calendar-nav"
+                          (click)="navigateMonth(1)"
+                        >
+                          &#9654;
+                        </button>
+                      </div>
+                      <div class="calendar-weekdays">
+                        <div class="weekday-cell" *ngFor="let day of weekdays">
+                          {{ day }}
+                        </div>
+                      </div>
+                      <div class="calendar-days">
+                        <div
+                          *ngFor="
+                            let day of getDaysInMonth(
+                              currentMonth.getFullYear(),
+                              currentMonth.getMonth()
+                            )
+                          "
+                          class="calendar-day"
+                          [class.empty-day]="day === 0"
+                          [class.selectable]="isCheckOutDateSelectable(day)"
+                          [class.unselectable]="
+                            !isCheckOutDateSelectable(day) && day !== 0
+                          "
+                          (click)="selectDate('checkOut', day)"
+                        >
+                          {{ day !== 0 ? day : "" }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="error-message"
+                    *ngIf="
+                      bookingForm.get('checkOutDate')?.invalid &&
+                      bookingForm.get('checkOutDate')?.touched
+                    "
+                  >
+                    Please select a check-out date
+                  </div>
+                </div>
+              </div>
+
+              <!-- Adult and Child Count -->
+              <div
+                class="form-row"
+                *ngIf="bookingForm.get('packageType')?.value !== 'event'"
+              >
+                <div class="form-group">
+                  <label for="adults">Adults</label>
+                  <div class="number-input">
+                    <button
+                      type="button"
+                      (click)="queueCounterAction('adult', 'decrement')"
+                      class="decrement"
+                      [disabled]="
+                        bookingForm.get('adultCount')?.value <= getMinAdults()
+                      "
+                    >
+                      -
+                    </button>
+                    <input
+                      type="number"
+                      id="adults"
+                      formControlName="adultCount"
+                      min="1"
+                      required
+                      (input)="updateBookingSummary()"
+                    />
+                    <button
+                      type="button"
+                      (click)="queueCounterAction('adult', 'increment')"
+                      class="increment"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="children">Children</label>
+                  <div class="number-input">
+                    <button
+                      type="button"
+                      (click)="queueCounterAction('child', 'decrement')"
+                      class="decrement"
+                      [disabled]="bookingForm.get('childCount')?.value <= 0"
+                    >
+                      -
+                    </button>
+                    <input
+                      type="number"
+                      id="children"
+                      formControlName="childCount"
+                      min="0"
+                      required
+                      readonly
+                    />
+                    <button
+                      type="button"
+                      (click)="queueCounterAction('child', 'increment')"
+                      class="increment"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Event Type for Corporate/Other Event -->
+              <div
+                class="form-row"
+                *ngIf="bookingForm.get('packageType')?.value === 'event'"
+              >
+                <div class="form-group full-width">
+                  <label for="event-type">Event Type</label>
+                  <select
+                    id="event-type"
+                    formControlName="eventType"
+                    [class.invalid]="
+                      bookingForm.get('eventType')?.invalid &&
+                      bookingForm.get('eventType')?.touched
+                    "
+                  >
+                    <option value="" disabled>Select an event type</option>
+                    <option value="wedding">Wedding</option>
+                    <option value="birthday">Birthday Party</option>
+                    <option value="corporate">Corporate Event</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <div
+                    class="error-message"
+                    *ngIf="
+                      bookingForm.get('eventType')?.invalid &&
+                      bookingForm.get('eventType')?.touched
+                    "
+                  >
+                    Please select an event type
+                  </div>
+                </div>
+              </div>
+
+              <!-- Special Requests -->
+              <div class="form-row">
+                <div class="form-group full-width">
+                  <label for="special-requests"
+                    >Special Requests (Optional)</label
+                  >
+                  <textarea
+                    id="special-requests"
+                    formControlName="specialRequests"
+                    placeholder="Any special requests or accommodations..."
+                    rows="2"
+                    (input)="updateBookingSummary()"
+                  ></textarea>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="form-row">
+                <div class="form-group full-width">
+                  <button
+                    type="submit"
+                    class="btn-book"
+                    [disabled]="isSubmitting"
+                  >
+                    <span *ngIf="!isSubmitting">Check Availability</span>
+                    <span *ngIf="isSubmitting" class="loading-spinner"></span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Summary Column -->
+          <div class="booking-summary-column" *ngIf="selectedRoom">
+            <div class="booking-summary-card">
+              <h3>Booking Summary</h3>
+
+              <div class="summary-item">
+                <span class="summary-label">Room/Package:</span>
+                <span class="summary-value">{{ bookingSummary.roomName }}</span>
+              </div>
+
+              <div class="summary-item">
+                <span class="summary-label">Type:</span>
+                <span class="summary-value">{{
+                  bookingSummary.packageType
+                }}</span>
+              </div>
+
+              <div class="summary-item" *ngIf="bookingSummary.eventType">
+                <span class="summary-label">Event Type:</span>
+                <span class="summary-value">{{
+                  bookingSummary.eventType
+                }}</span>
+              </div>
+
+              <div class="summary-item" *ngIf="bookingSummary.acOption">
+                <span class="summary-label">Option:</span>
+                <span class="summary-value">{{ bookingSummary.acOption }}</span>
+              </div>
+
+              <div class="summary-item" *ngIf="bookingSummary.checkInDate">
+                <span class="summary-label">{{
+                  isNightPackage() ? "Check-in:" : "Date:"
+                }}</span>
+                <span class="summary-value">{{
+                  bookingSummary.checkInDate
+                }}</span>
+              </div>
+
+              <div
+                class="summary-item"
+                *ngIf="isNightPackage() && bookingSummary.checkOutDate"
+              >
+                <span class="summary-label">Check-out:</span>
+                <span class="summary-value">{{
+                  bookingSummary.checkOutDate
+                }}</span>
+              </div>
+
+              <div
+                class="summary-item"
+                *ngIf="
+                  bookingSummary.timing &&
+                  bookingForm.get('packageType')?.value !== 'event'
+                "
+              >
+                <span class="summary-label">Hours:</span>
+                <span class="summary-value">{{ bookingSummary.timing }}</span>
+              </div>
+
+              <div
+                class="summary-item"
+                *ngIf="bookingSummary.adults || bookingSummary.children"
+              >
+                <span class="summary-label">Guests:</span>
+                <span class="summary-value">
+                  {{ bookingSummary.adults }} Adult(s)
+                  <span *ngIf="bookingSummary.children > 0">
+                    & {{ bookingSummary.children }} Child(ren)
+                  </span>
+                </span>
+              </div>
+
+              <div class="summary-price" *ngIf="bookingSummary.basePrice">
+                <div class="price-row">
+                  <span>Base Price:</span>
+                  <span>{{ bookingSummary.basePrice }}</span>
+                </div>
+
+                <div class="price-row" *ngIf="bookingSummary.extraPersonCost">
+                  <span>Extra Adult Charges:</span>
+                  <span>{{ bookingSummary.extraPersonCost }}</span>
+                </div>
+
+                <div class="price-row" *ngIf="bookingSummary.extraChildCost">
+                  <span>Extra Child Charges:</span>
+                  <span>{{ bookingSummary.extraChildCost }}</span>
+                </div>
+
+                <div class="price-row total">
+                  <span>Total:</span>
+                  <span>{{ bookingSummary.totalPrice }}</span>
+                </div>
+              </div>
+
+              <div
+                class="summary-inclusions"
+                *ngIf="bookingSummary.inclusions?.length > 0"
+              >
+                <h4>Package Inclusions:</h4>
+                <ul>
+                  <li *ngFor="let inclusion of bookingSummary.inclusions">
+                    <i [class]="getInclusionIcon(inclusion)"></i>
+                    {{ inclusion }}
+                  </li>
+                </ul>
+              </div>
+
+              <div class="summary-notes">
+                <p *ngIf="bookingSummary.basePrice && !isEventPackage()">
+                  <i class="fas fa-info-circle"></i> All prices are inclusive of
+                  taxes
+                </p>
+                <p *ngIf="isNightPackage()">
+                  <i class="fas fa-clock"></i> Check-in: 2:00 PM, Check-out:
+                  11:00 AM
+                </p>
+                <p *ngIf="bookingForm.get('packageType')?.value === 'day'">
+                  <i class="fas fa-clock"></i> Day use hours: 9:30 AM to 5:00 PM
+                </p>
+                <p *ngIf="bookingForm.get('packageType')?.value === 'event'">
+                  <i class="fas fa-info-circle"></i> Pricing and availability
+                  for events will be confirmed via WhatsApp
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Popup -->
+  <div class="popup-overlay" *ngIf="showSuccessPopup">
+    <div class="popup-card success-popup">
+      <div class="popup-icon">✓</div>
+      <h3>Booking Request Sent!</h3>
+      <p>You will be redirected to WhatsApp to confirm your booking details.</p>
+      <button (click)="closePopup()" class="popup-btn">Close</button>
+    </div>
+  </div>
+
+  <!-- Error Popup -->
+  <div class="popup-overlay" *ngIf="showErrorPopup">
+    <div class="popup-card error-popup">
+      <div class="popup-icon">!</div>
+      <h3>Something Went Wrong</h3>
+      <p>Please check your form and try again.</p>
+      <button (click)="closePopup()" class="popup-btn">Close</button>
+    </div>
+  </div>
+</div>

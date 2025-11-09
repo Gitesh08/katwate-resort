@@ -1,0 +1,133 @@
+.nearby-attractions {
+  padding: 80px 0;
+  background-color: #fff;
+  font-family: "Google Sans", sans-serif;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.section-header h2 {
+  color: #ff6b00;
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  position: relative;
+  display: inline-block;
+}
+
+.section-header h2::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 3px;
+  background-color: #ff6b00;
+  transition: width 0.3s ease;
+}
+
+.section-header:hover h2::after {
+  width: 80px;
+}
+
+.section-header p {
+  color: #666;
+  margin-top: 10px;
+  font-size: 1.1rem;
+}
+
+.attractions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.attraction-card {
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  border: 1px solid #e0e0e0;
+}
+
+.attraction-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e0e0e0;
+}
+
+.attraction-image {
+  height: 250px;
+  overflow: hidden;
+  position: relative;
+}
+
+.attraction-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.attraction-card:hover .attraction-image img {
+  transform: scale(1.1);
+}
+
+.attraction-distance {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background-color: rgba(255, 107, 0, 0.9);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.attraction-info {
+  padding: 20px;
+}
+
+.attraction-info h3 {
+  color: #333;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.attraction-info p {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 992px) {
+  .attractions-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .attractions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-header h2 {
+    font-size: 1.6rem;
+  }
+
+  .section-header p {
+    font-size: 0.9rem;
+    padding: 0 5px;
+  }
+}

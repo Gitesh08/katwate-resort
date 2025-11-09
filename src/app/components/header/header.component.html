@@ -1,0 +1,59 @@
+<header class="header" [ngClass]="{ scrolled: isScrolled }">
+  <div class="container">
+    <div class="navbar">
+      <div class="logo">
+        <img
+          src="/assets/images/logo.png"
+          alt="Katwate's Resort Logo"
+          class="animated-logo"
+        />
+      </div>
+      <nav class="nav-links">
+        <ul>
+          <li *ngFor="let section of sections">
+            <a
+              (click)="scrollToSection(section.id)"
+              class="nav-link animated-link"
+              >{{ section.name }}</a
+            >
+          </li>
+        </ul>
+      </nav>
+      <div class="header-cta">
+        <a (click)="scrollToSection('tariffs')" class="btn-contact animated-btn"
+          >Book Your Stay</a
+        >
+      </div>
+      <button
+        class="mobile-menu-toggle"
+        [ngClass]="{ active: mobileMenuOpen }"
+        (click)="toggleMobileMenu()"
+      >
+        <i class="fa fa-bars"></i>
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+  </div>
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" [ngClass]="{ open: mobileMenuOpen }">
+    <ul>
+      <li *ngFor="let section of sections; let i = index" [style.--i]="i + 1">
+        <a
+          (click)="scrollToSection(section.id); toggleMobileMenu()"
+          class="mobile-nav-link"
+        >
+          <i class="fa {{ section.icon }}"></i>
+          {{ section.name }}
+        </a>
+      </li>
+      <li class="mobile-cta" [style.--i]="sections.length + 1">
+        <a
+          (click)="scrollToSection('tariffs'); toggleMobileMenu()"
+          class="btn-mobile-book"
+        >
+          <i class="fa fa-calendar-check"></i> Book Now
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>

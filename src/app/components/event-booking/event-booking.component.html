@@ -1,0 +1,296 @@
+<!-- Event Section with Video Background and Overlaid Content -->
+<section class="event-section">
+  <div class="video-background">
+    <video autoplay loop muted playsinline webkit-playsinline>
+      <source src="assets/clips/event-promo.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+    <div class="video-overlay"></div>
+  </div>
+  <div class="event-content">
+    <div class="section-header">
+      <h2>Host Your Dream Event With Us</h2>
+    </div>
+    <div class="content-overlay">
+      <h3>Make It Unforgettable</h3>
+      <p>
+        From weddings to corporate retreats, we’ll turn your ideas into reality
+        at Katwate’s Resort.
+      </p>
+      <button class="cta-button animated-btn" (click)="openEventForm()">
+        Plan Your Event Now
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal for Event Form -->
+  <div
+    class="booking-modal-overlay"
+    *ngIf="isModalOpen"
+    (click)="handleOverlayClick($event)"
+  >
+    <div class="form-container">
+      <div class="form-header">
+        <h2>Plan Your Event</h2>
+        <button
+          class="close-form-btn"
+          (click)="closeForm()"
+          aria-label="Close form"
+        >
+          Close Form
+        </button>
+      </div>
+      <form [formGroup]="eventForm" (ngSubmit)="sendToWhatsApp()">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="event-type"
+              ><i class="fas fa-calendar-check"></i> Event Type</label
+            >
+            <select
+              id="event-type"
+              formControlName="eventType"
+              [class.invalid]="
+                eventForm.get('eventType')?.invalid &&
+                eventForm.get('eventType')?.touched
+              "
+            >
+              <option value="" disabled>Select an event type</option>
+              <option value="wedding">Wedding</option>
+              <option value="birthday">Birthday Party</option>
+              <option value="corporate">Corporate Event</option>
+              <option value="other">Other</option>
+            </select>
+            <div
+              class="error-message"
+              *ngIf="
+                eventForm.get('eventType')?.invalid &&
+                eventForm.get('eventType')?.touched
+              "
+            >
+              Please select an event type
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="check-in-date"
+              ><i class="fas fa-calendar-alt"></i> Start Date</label
+            >
+            <input
+              type="text"
+              id="check-in-date"
+              readonly
+              [value]="formatSelectedDate('checkIn')"
+              (click)="toggleCalendar('checkIn')"
+              [class.invalid]="
+                eventForm.get('checkInDate')?.invalid &&
+                eventForm.get('checkInDate')?.touched
+              "
+            />
+            <div
+              class="error-message"
+              *ngIf="
+                eventForm.get('checkInDate')?.invalid &&
+                eventForm.get('checkInDate')?.touched
+              "
+            >
+              Please select a start date
+            </div>
+            <div *ngIf="showCheckInCalendar" class="calendar">
+              <div class="calendar-header">
+                <button
+                  type="button"
+                  (click)="navigateMonth(-1)"
+                  aria-label="Previous month"
+                >
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+                <span>{{ getMonthYearString() }}</span>
+                <button
+                  type="button"
+                  (click)="navigateMonth(1)"
+                  aria-label="Next month"
+                >
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+              <div class="calendar-grid">
+                <div *ngFor="let day of weekdays" class="calendar-day-header">
+                  {{ day }}
+                </div>
+                <div
+                  *ngFor="
+                    let day of getDaysInMonth(
+                      currentMonth.getFullYear(),
+                      currentMonth.getMonth()
+                    )
+                  "
+                  class="calendar-day"
+                  [class.disabled]="!isDateSelectable(day)"
+                  [class.selected]="isDaySelected(day, 'checkIn')"
+                  (click)="isDateSelectable(day) && selectDate('checkIn', day)"
+                >
+                  {{ day || "" }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="check-out-date"
+              ><i class="fas fa-calendar-alt"></i> End Date (Optional)</label
+            >
+            <input
+              type="text"
+              id="check-out-date"
+              readonly
+              [value]="formatSelectedDate('checkOut')"
+              (click)="toggleCalendar('checkOut')"
+            />
+            <div *ngIf="showCheckOutCalendar" class="calendar">
+              <div class="calendar-header">
+                <button
+                  type="button"
+                  (click)="navigateMonth(-1)"
+                  aria-label="Previous month"
+                >
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+                <span>{{ getMonthYearString() }}</span>
+                <button
+                  type="button"
+                  (click)="navigateMonth(1)"
+                  aria-label="Next month"
+                >
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+              <div class="calendar-grid">
+                <div *ngFor="let day of weekdays" class="calendar-day-header">
+                  {{ day }}
+                </div>
+                <div
+                  *ngFor="
+                    let day of getDaysInMonth(
+                      currentMonth.getFullYear(),
+                      currentMonth.getMonth()
+                    )
+                  "
+                  class="calendar-day"
+                  [class.disabled]="!isCheckOutDateSelectable(day)"
+                  [class.selected]="isDaySelected(day, 'checkOut')"
+                  (click)="
+                    isCheckOutDateSelectable(day) && selectDate('checkOut', day)
+                  "
+                >
+                  {{ day || "" }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="adults"><i class="fas fa-users"></i> Adults</label>
+            <div class="number-input">
+              <button
+                type="button"
+                (click)="decrementAdults()"
+                [disabled]="eventForm.get('adults')?.value <= 1"
+              >
+                -
+              </button>
+              <input
+                type="number"
+                id="adults"
+                formControlName="adults"
+                min="1"
+                readonly
+              />
+              <button type="button" (click)="incrementAdults()">+</button>
+            </div>
+            <div
+              class="error-message"
+              *ngIf="
+                eventForm.get('adults')?.invalid &&
+                eventForm.get('adults')?.touched
+              "
+            >
+              At least 1 adult required
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="children"><i class="fas fa-child"></i> Children</label>
+            <div class="number-input">
+              <button
+                type="button"
+                (click)="decrementChildren()"
+                [disabled]="eventForm.get('children')?.value <= 0"
+              >
+                -
+              </button>
+              <input
+                type="number"
+                id="children"
+                formControlName="children"
+                min="0"
+                readonly
+              />
+              <button type="button" (click)="incrementChildren()">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label for="special-requests"
+              ><i class="fas fa-comment-dots"></i> Special Requests
+              (Optional)</label
+            >
+            <textarea
+              id="special-requests"
+              formControlName="specialRequests"
+              placeholder="E.g., specific decorations, catering preferences, or accessibility needs..."
+              rows="4"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <button
+              type="submit"
+              class="btn-book"
+              [disabled]="isSubmitting"
+              [class.submitting]="isSubmitting"
+            >
+              <i class="fab fa-whatsapp"></i>
+              {{ isSubmitting ? "Submitting..." : "Enquire via WhatsApp" }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Success Popup -->
+    <div class="popup-overlay" *ngIf="showSuccessPopup">
+      <div class="popup-card success-popup">
+        <div class="popup-icon"><i class="fas fa-check-circle"></i></div>
+        <h3>Enquiry Sent!</h3>
+        <p>You will be redirected to WhatsApp to confirm your event details.</p>
+        <button (click)="closePopup()" class="popup-btn">Close</button>
+      </div>
+    </div>
+
+    <!-- Error Popup -->
+    <div class="popup-overlay" *ngIf="showErrorPopup">
+      <div class="popup-card error-popup">
+        <div class="popup-icon"><i class="fas fa-exclamation-circle"></i></div>
+        <h3>Something Went Wrong</h3>
+        <p>Please check your form and try again.</p>
+        <button (click)="closePopup()" class="popup-btn">Close</button>
+      </div>
+    </div>
+  </div>
+</section>

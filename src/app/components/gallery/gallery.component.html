@@ -1,0 +1,67 @@
+<section class="gallery" id="gallery">
+  <div class="container">
+    <div class="section-header">
+      <h2>Discover Our Moments</h2>
+      <p>Explore the sights that make every stay unforgettable.</p>
+      <div class="gallery-controls">
+        <div class="filter-container">
+          <label for="category-filter">Filter by</label>
+          <select
+            id="category-filter"
+            [(ngModel)]="selectedCategory"
+            (ngModelChange)="onCategoryChange($event)"
+            class="category-filter"
+          >
+            <option
+              *ngFor="let category of categories"
+              [value]="category.value"
+            >
+              {{ category.label }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="gallery-slider-container">
+      <button class="gallery-nav prev" (click)="prevSlide()">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+
+      <div class="gallery-slider">
+        <div class="gallery-track" [style.transform]="getTransformStyle()">
+          <div
+            class="gallery-item"
+            *ngFor="let image of displayImages; let i = index"
+            [ngClass]="{ center: isCenterImage(i) }"
+          >
+            <div class="gallery-item-container">
+              <img [src]="image.url" [alt]="image.alt" />
+              <button
+                class="expand-icon"
+                (click)="openImageModal(image.url, image.alt)"
+              >
+                <span class="icon-expand"></span>
+                <span class="sr-only">View Fullscreen</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="gallery-nav next" (click)="nextSlide()">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <div class="image-modal" *ngIf="isModalOpen" (click)="closeImageModal()">
+      <div class="image-modal-content" (click)="$event.stopPropagation()">
+        <button class="modal-close" (click)="closeImageModal()">
+          <span class="icon-close"></span>
+          <span class="sr-only">Close</span>
+        </button>
+        <img [src]="selectedImageUrl" [alt]="selectedImageAlt" />
+      </div>
+    </div>
+  </div>
+</section>

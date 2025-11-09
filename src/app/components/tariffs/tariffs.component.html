@@ -1,0 +1,279 @@
+<section class="tariffs" id="tariffs">
+  <div class="container">
+    <div class="section-header">
+      <h2>Packages & Pricing</h2>
+      <p>Pick your perfect escape — day retreats or overnight stays</p>
+    </div>
+
+    <div class="view-toggle">
+      <button
+        [class.active]="activeView === 'day'"
+        (click)="toggleView('day')"
+        class="toggle-btn"
+      >
+        Day Picnic
+      </button>
+      <button
+        [class.active]="activeView === 'night'"
+        (click)="toggleView('night')"
+        class="toggle-btn"
+      >
+        Night Stay
+      </button>
+    </div>
+
+    <div class="tariffs-carousel-container">
+      <div
+        class="scroll-nav prev"
+        *ngIf="showLeftScroll"
+        (click)="scrollLeft()"
+      >
+        <i class="fas fa-chevron-left"></i>
+      </div>
+
+      <div
+        class="scroll-nav next"
+        *ngIf="showRightScroll"
+        (click)="scrollRight()"
+      >
+        <i class="fas fa-chevron-right"></i>
+      </div>
+
+      <div
+        class="tariffs-scroll-wrapper"
+        #scrollContainer
+        (touchstart)="onTouchStart($event)"
+        (touchmove)="onTouchMove($event)"
+        (touchend)="onTouchEnd()"
+      >
+        <div class="tariffs-grid">
+          <div class="tariff-card" *ngFor="let room of getVisibleRooms()">
+            <div class="image-carousel">
+              <div
+                class="carousel-inner"
+                [style.transform]="
+                  'translateX(-' + room.currentImageIndex * 100 + '%)'
+                "
+              >
+                <div class="carousel-item" *ngFor="let image of room.images">
+                  <div class="carousel-item-container">
+                    <img [src]="image" [alt]="room.name" />
+                    <button
+                      class="expand-icon"
+                      (click)="openImageModal(image, room.name, $event)"
+                    >
+                      <span class="icon-expand"></span>
+                      <span class="sr-only">View Fullscreen</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="carousel-arrow prev"
+                (click)="prevImage(room, $event)"
+              >
+                <i class="fas fa-chevron-left"></i>
+              </div>
+
+              <div
+                class="carousel-arrow next"
+                (click)="nextImage(room, $event)"
+              >
+                <i class="fas fa-chevron-right"></i>
+              </div>
+
+              <div class="carousel-controls">
+                <div
+                  *ngFor="let image of room.images; let i = index"
+                  class="carousel-dot"
+                  [class.active]="i === room.currentImageIndex"
+                  (click)="setImage(room, i, $event)"
+                ></div>
+              </div>
+
+              <div class="tariff-badge" *ngIf="room.badge">
+                {{ room.badge }}
+              </div>
+            </div>
+
+            <div class="tariff-info" [class.expanded]="room.expanded">
+              <div class="tariff-header">
+                <h3>{{ room.name }}</h3>
+
+                <!-- AC/Non-AC Toggle -->
+                <div class="ac-toggle" *ngIf="room.hasACOption">
+                  <span
+                    [class.active]="!room.acSelected"
+                    (click)="toggleAC(room, false)"
+                    >Non-AC</span
+                  >
+                  <span
+                    class="toggle-switch"
+                    [class.toggled]="room.acSelected"
+                    (click)="toggleAC(room, !room.acSelected)"
+                  >
+                    <span class="toggle-knob"></span>
+                  </span>
+                  <span
+                    [class.active]="room.acSelected"
+                    (click)="toggleAC(room, true)"
+                    >AC</span
+                  >
+                </div>
+              </div>
+
+              <!-- Price -->
+              <div class="tariff-price">
+                <span class="price">{{ getCurrentPrice(room) }}</span>
+                <span class="per-unit" *ngIf="!room.id.includes('couple')"
+                  >per person</span
+                >
+                <span class="per-unit" *ngIf="room.id.includes('couple')"
+                  >per couple</span
+                >
+              </div>
+
+              <!-- Capacity -->
+              <div class="tariff-capacity">
+                <i class="fas fa-user"></i> {{ room.capacity }}
+              </div>
+
+              <!-- Description (short) -->
+              <p class="tariff-description" *ngIf="!room.expanded">
+                {{ room.description | slice: 0 : 80 }}...
+              </p>
+
+              <!-- Expanded details -->
+              <div class="expanded-content" *ngIf="room.expanded">
+                <p class="tariff-description">{{ room.description }}</p>
+
+                <!-- Pricing Options -->
+                <div
+                  class="tariff-variable-pricing"
+                  *ngIf="
+                    getApplicablePricing(room).length > 0 &&
+                    activeView === 'night'
+                  "
+                >
+                  <h4>Flexible Pricing:</h4>
+                  <ul>
+                    <li *ngFor="let option of getApplicablePricing(room)">
+                      <i class="fas fa-tag"></i>
+                      ₹{{ option.price }} per person ({{ option.persons }}
+                      persons)
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Extra Charges -->
+                <div
+                  class="tariff-extra-charges"
+                  *ngIf="hasExtraPersonCharges(room) && activeView === 'night'"
+                >
+                  <h4>Extra Guests:</h4>
+                  <ul>
+                    <li *ngIf="getCurrentExtraPerson(room)">
+                      <i class="fas fa-user-plus"></i>
+                      Adult: ₹{{ getCurrentExtraPerson(room) }}
+                    </li>
+                    <li *ngIf="getCurrentExtraChild(room)">
+                      <i class="fas fa-child"></i>
+                      Child (4-8yrs): ₹{{ getCurrentExtraChild(room) }}
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Timings for Day Packages -->
+                <div
+                  class="tariff-timing"
+                  *ngIf="room.timing && activeView === 'day'"
+                >
+                  <i class="fas fa-clock"></i> {{ room.timing }}
+                </div>
+
+                <!-- Inclusions -->
+                <div
+                  class="tariff-inclusions"
+                  *ngIf="getCurrentInclusions(room).length > 0"
+                >
+                  <h4>Includes:</h4>
+                  <ul>
+                    <li *ngFor="let inclusion of getCurrentInclusions(room)">
+                      <i [class]="getInclusionIcon(inclusion)"></i>
+                      {{ inclusion }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Book Now -->
+              <div class="btn-book-tariff-container">
+                <button
+                  class="btn-book-tariff"
+                  (click)="openBookingModal(room)"
+                >
+                  Book Now
+                </button>
+              </div>
+
+              <!-- Expand/Collapse -->
+              <div class="toggle-details-container">
+                <button class="toggle-details-btn" (click)="toggleExpand(room)">
+                  <span *ngIf="!room.expanded">More Details</span>
+                  <span *ngIf="room.expanded">Show Less</span>
+                  <i
+                    [class]="
+                      room.expanded
+                        ? 'fas fa-chevron-up'
+                        : 'fas fa-chevron-down'
+                    "
+                  ></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Indicators -->
+      <div
+        class="carousel-indicators"
+        *ngIf="getVisibleRooms().length > totalVisibleCards"
+      >
+        <div
+          *ngFor="let room of getVisibleRooms(); let i = index"
+          class="carousel-indicator"
+          [class.active]="i === currentCardIndex"
+          (click)="goToCard(i)"
+          [style.display]="i >= maxIndex + 1 ? 'none' : 'block'"
+        ></div>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="tariff-notes">
+      <p><i class="fas fa-clock"></i> Day Hours: 9:30 AM – 5:00 PM</p>
+      <p>
+        <i class="fas fa-bed"></i> Night Stay: Check-in 2:00 PM | Check-out
+        11:00 AM
+      </p>
+      <p><i class="fas fa-tags"></i> All prices include taxes</p>
+      <p>
+        <i class="fas fa-hand-point-right"></i> Swipe or tap arrows to explore
+        rooms
+      </p>
+    </div>
+
+    <!-- Modal -->
+    <div class="image-modal" *ngIf="isModalOpen" (click)="closeImageModal()">
+      <div class="image-modal-content" (click)="$event.stopPropagation()">
+        <button class="modal-close" (click)="closeImageModal()">
+          <span class="icon-close"></span>
+          <span class="sr-only">Close</span>
+        </button>
+        <img [src]="selectedImageUrl" [alt]="selectedImageAlt" />
+      </div>
+    </div>
+  </div>
+</section>

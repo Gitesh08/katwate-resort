@@ -1,0 +1,1069 @@
+.tariffs {
+  padding: 60px 20px;
+  background-color: #ffffff;
+  font-family: "Google Sans", sans-serif;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.section-header h2 {
+  color: #ff6b00;
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  position: relative;
+  display: inline-block;
+}
+
+.section-header h2::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 3px;
+  background-color: #ff6b00;
+  transition: width 0.3s ease;
+}
+
+.section-header:hover h2::after {
+  width: 80px;
+}
+
+.section-header p {
+  color: #666;
+  margin-top: 10px;
+  font-size: 1.1rem;
+}
+
+.view-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.toggle-btn {
+  background-color: #f0f0f0;
+  border: 1px solid #e0e0e0;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "Google Sans", sans-serif;
+}
+
+.toggle-btn:first-child {
+  border-radius: 30px 0 0 30px;
+}
+
+.toggle-btn:last-child {
+  border-radius: 0 30px 30px 0;
+}
+
+.toggle-btn.active {
+  background-color: #ff6b00;
+  color: white;
+}
+
+.tariffs-carousel-container {
+  position: relative;
+  width: 100%;
+  padding: 0 20px;
+  margin-bottom: 40px;
+}
+
+.tariffs-scroll-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 10px 20px 20px;
+  margin: -10px -20px 0;
+}
+
+.tariffs-scroll-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.tariffs-grid {
+  display: flex;
+  gap: 30px;
+  padding: 10px 5px;
+  align-items: flex-start;
+}
+
+.scroll-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  background-color: rgba(255, 107, 0, 0.9);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid #e0e0e0;
+}
+
+.scroll-nav:hover {
+  background-color: #ff6b00;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.scroll-nav.prev {
+  left: 0;
+}
+
+.scroll-nav.next {
+  right: 0;
+}
+
+.tariff-card {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  flex: 0 0 400px;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  align-self: flex-start;
+}
+
+.tariff-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.image-carousel {
+  height: 220px;
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-inner {
+  display: flex;
+  transition: transform 0.5s ease;
+  height: 100%;
+}
+
+.carousel-item {
+  min-width: 100%;
+  height: 100%;
+}
+
+.carousel-item-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.expand-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid #666;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.expand-icon:hover {
+  background-color: #ff6b00;
+  transform: scale(1.1);
+  border: 1px solid #f2884e;
+}
+
+.icon-expand {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>');
+  background-size: cover;
+}
+
+.image-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.image-modal-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.image-modal-content img {
+  width: 100%;
+  height: auto;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid #666;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.modal-close:hover {
+  background-color: #ff6b00;
+  transform: scale(1.1);
+  border: 1px solid #f2884e;
+}
+
+.icon-close {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>');
+  background-size: cover;
+}
+
+.carousel-controls {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  display: flex;
+  gap: 8px;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.carousel-dot.active {
+  background-color: #ff6b00;
+  transform: scale(1.2);
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+  z-index: 1;
+  transition: all 0.3s ease;
+  opacity: 0;
+}
+
+.image-carousel:hover .carousel-arrow {
+  opacity: 1;
+}
+
+.carousel-arrow:hover {
+  background-color: white;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-arrow.prev {
+  left: 10px;
+}
+
+.carousel-arrow.next {
+  right: 10px;
+}
+
+.tariff-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background-color: rgba(255, 107, 0, 0.9);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  z-index: 1;
+}
+
+.tariff-info {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  transition: all 0.3s ease;
+}
+
+.tariff-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: nowrap;
+}
+
+.tariff-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #333;
+}
+
+.tariff-info.expanded {
+  height: auto;
+}
+
+.tariff-price {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 15px;
+}
+
+.price {
+  color: #ff6b00;
+  font-size: 1.7rem;
+  font-weight: 600;
+}
+
+.per-unit {
+  color: #666;
+  font-size: 0.9rem;
+  margin-left: 5px;
+}
+
+.tariff-capacity {
+  color: #666;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.tariff-capacity i {
+  margin-right: 8px;
+  color: #ff6b00;
+}
+
+.tariff-description {
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.tariff-variable-pricing {
+  margin-bottom: 16px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.tariff-variable-pricing h4,
+.tariff-extra-charges h4,
+.tariff-inclusions h4 {
+  color: #333;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.tariff-variable-pricing ul,
+.tariff-extra-charges ul,
+.tariff-inclusions ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.tariff-variable-pricing li,
+.tariff-extra-charges li {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  position: relative;
+  padding-left: 28px;
+  line-height: 1.4;
+}
+
+.tariff-inclusions li {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  position: relative;
+  padding-left: 30px;
+  line-height: 1.4;
+}
+
+.tariff-variable-pricing li i,
+.tariff-extra-charges li i,
+.tariff-inclusions li i {
+  color: #ff6b00;
+  position: absolute;
+  left: 0;
+  top: 2px;
+  font-size: 1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.tariff-extra-charges {
+  margin-bottom: 16px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.tariff-inclusions {
+  margin-bottom: 24px;
+}
+
+.tariff-timing {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.tariff-timing i {
+  color: #ff6b00;
+  margin-right: 8px;
+}
+
+.btn-book-tariff-container {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.btn-book-tariff {
+  display: inline-block;
+  background-color: #ff6b00;
+  color: white;
+  padding: 12px 30px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s;
+  text-align: center;
+  width: 80%;
+  border: 1px solid #ff9149;
+  font-size: 1rem;
+  font-family: "Google Sans", sans-serif;
+}
+
+.btn-book-tariff:hover {
+  background-color: #e55f00;
+  transform: translateY(-3px);
+}
+
+.tariff-notes {
+  margin-top: 40px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  padding: 24px;
+}
+
+.tariff-notes p {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.tariff-notes p:last-child {
+  margin-bottom: 0;
+}
+
+.tariff-notes i {
+  color: #ff6b00;
+  margin-right: 10px;
+  font-size: 1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 8px;
+}
+
+.carousel-indicator {
+  width: 8px;
+  height: 8px;
+  background-color: #ccc;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.carousel-indicator.active {
+  background-color: #ff6b00;
+  transform: scale(1.2);
+}
+
+.special-events-note {
+  background-color: #34ab00;
+  color: white !important;
+  padding: 12px 15px;
+  border-radius: 6px;
+  font-weight: 500;
+  margin-top: 15px;
+}
+
+.special-events-note i {
+  color: white !important;
+}
+
+.ac-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 0;
+  font-size: 0.8rem;
+}
+
+.ac-toggle span {
+  color: #666;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  white-space: nowrap;
+}
+
+.ac-toggle span.active {
+  color: #ff6b00;
+  font-weight: 600;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 36px;
+  height: 18px;
+  background-color: #ccc;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-switch.toggled {
+  background-color: #ff6b00;
+}
+
+.toggle-knob {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background-color: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease;
+}
+
+/* Uncomment the following to color the toggle knob #ff6b00 when active */
+/*
+.toggle-switch.toggled .toggle-knob {
+  transform: translateX(18px);
+  background-color: #ff6b00;
+}
+*/
+
+.toggle-switch.toggled .toggle-knob {
+  transform: translateX(18px);
+  background-color: #ffffff; /* Kept white for contrast */
+}
+
+.expanded-content {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.toggle-details-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.toggle-details-btn {
+  background: none;
+  border: none;
+  color: #ff6b00;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  font-family: "Google Sans", sans-serif;
+}
+
+.toggle-details-btn:hover {
+  background-color: rgba(255, 107, 0, 0.1);
+}
+
+.toggle-details-btn i {
+  font-size: 0.8rem;
+}
+
+@media (max-width: 768px) {
+  .tariffs {
+    padding: 40px 15px;
+  }
+
+  .section-header h2 {
+    font-size: 2rem;
+  }
+
+  .tariff-card {
+    flex: 0 0 280px;
+  }
+
+  .image-modal-content {
+    max-width: 95%;
+    max-height: 95%;
+  }
+
+  .image-modal-content img {
+    max-height: 70vh;
+  }
+
+  .tariff-header {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .tariff-header h3 {
+    font-size: 1.2rem;
+  }
+
+  .ac-toggle {
+    font-size: 0.75rem;
+    gap: 6px;
+  }
+
+  .toggle-switch {
+    width: 32px;
+    height: 16px;
+  }
+
+  .toggle-knob {
+    width: 12px;
+    height: 12px;
+    top: 2px;
+    left: 2px;
+  }
+
+  .toggle-switch.toggled .toggle-knob {
+    transform: translateX(16px);
+  }
+}
+
+@media (max-width: 992px) {
+  .tariff-card {
+    flex: 0 0 300px;
+  }
+}
+
+@media (max-width: 576px) {
+  .tariff-card {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .section-header h2 {
+    font-size: 1.6rem;
+  }
+
+  .section-header p {
+    font-size: 0.9rem;
+    padding: 0 5px;
+  }
+
+  .scroll-nav {
+    width: 40px;
+    height: 40px;
+  }
+
+  .scroll-nav i {
+    font-size: 1rem;
+  }
+
+  .tariff-header {
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .tariff-header h3 {
+    font-size: 1rem;
+  }
+
+  .tariff-info {
+    padding: 16px; /* Reduced padding */
+  }
+
+  .tariff-price {
+    margin-bottom: 12px;
+  }
+
+  .price {
+    font-size: 1.4rem; /* Reduced from 1.7rem */
+  }
+
+  .per-unit {
+    font-size: 0.8rem; /* Reduced from 0.9rem */
+  }
+
+  .tariff-capacity {
+    font-size: 0.8rem; /* Reduced from 0.9rem */
+    margin-bottom: 12px;
+  }
+
+  .tariff-description {
+    font-size: 0.85rem; /* Reduced from 0.95rem */
+    margin-bottom: 16px;
+  }
+
+  .tariff-variable-pricing,
+  .tariff-extra-charges {
+    padding: 10px;
+    margin-bottom: 12px;
+  }
+
+  .tariff-variable-pricing h4,
+  .tariff-extra-charges h4,
+  .tariff-inclusions h4 {
+    font-size: 0.9rem; /* Reduced from 1rem */
+  }
+
+  .tariff-variable-pricing li,
+  .tariff-extra-charges li,
+  .tariff-inclusions li {
+    font-size: 0.8rem; /* Reduced from 0.9rem */
+    margin-bottom: 6px;
+    padding-left: 24px;
+  }
+
+  .tariff-variable-pricing li i,
+  .tariff-extra-charges li i,
+  .tariff-inclusions li i {
+    font-size: 0.9rem; /* Reduced from 1rem */
+  }
+
+  .tariff-timing {
+    font-size: 0.8rem; /* Reduced from 0.9rem */
+    margin-bottom: 12px;
+  }
+
+  .btn-book-tariff {
+    font-size: 0.85rem; /* Reduced from 1rem */
+    padding: 10px 24px; /* Reduced padding */
+  }
+
+  .toggle-details-btn {
+    font-size: 0.8rem; /* Reduced from 0.9rem */
+  }
+
+  .toggle-details-btn i {
+    font-size: 0.7rem; /* Reduced from 0.8rem */
+  }
+
+  .ac-toggle {
+    font-size: 0.65rem; /* Reduced from 0.7rem */
+    gap: 5px;
+  }
+
+  .toggle-switch {
+    width: 28px;
+    height: 14px;
+  }
+
+  .toggle-knob {
+    width: 10px;
+    height: 10px;
+    top: 2px;
+    left: 2px;
+  }
+
+  .toggle-switch.toggled .toggle-knob {
+    transform: translateX(14px);
+  }
+}
+
+@media (max-width: 360px) {
+  .tariffs {
+    padding: 30px 10px;
+  }
+
+  .section-header h2 {
+    font-size: 1.4rem;
+  }
+
+  .section-header p {
+    font-size: 0.85rem;
+  }
+
+  .tariff-card {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .btn-book-tariff {
+    font-size: 0.8rem; /* Further reduced */
+    padding: 8px 20px; /* Further reduced padding */
+  }
+
+  .tariff-info {
+    padding: 12px; /* Further reduced padding */
+  }
+
+  .tariff-info h3 {
+    font-size: 0.9rem; /* Reduced from 1.1rem */
+  }
+
+  .price {
+    font-size: 1.3rem; /* Reduced from 1.4rem */
+  }
+
+  .per-unit {
+    font-size: 0.75rem; /* Reduced from 0.8rem */
+  }
+
+  .tariff-capacity {
+    font-size: 0.75rem; /* Reduced from 0.8rem */
+  }
+
+  .tariff-description {
+    font-size: 0.8rem; /* Reduced from 0.85rem */
+  }
+
+  .tariff-variable-pricing,
+  .tariff-extra-charges {
+    padding: 8px; /* Further reduced */
+  }
+
+  .tariff-variable-pricing h4,
+  .tariff-extra-charges h4,
+  .tariff-inclusions h4 {
+    font-size: 0.85rem; /* Reduced from 0.9rem */
+  }
+
+  .tariff-variable-pricing li,
+  .tariff-extra-charges li,
+  .tariff-inclusions li {
+    font-size: 0.75rem; /* Reduced from 0.8rem */
+    padding-left: 20px;
+  }
+
+  .tariff-variable-pricing li i,
+  .tariff-extra-charges li i,
+  .tariff-inclusions li i {
+    font-size: 0.85rem; /* Reduced from 0.9rem */
+  }
+
+  .tariff-timing {
+    font-size: 0.75rem; /* Reduced from 0.8rem */
+  }
+
+  .image-carousel {
+    height: 180px;
+  }
+
+  .tariff-header {
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .tariff-header h3 {
+    font-size: 0.9rem; /* Reduced from 1rem */
+  }
+
+  .ac-toggle {
+    font-size: 0.6rem; /* Reduced from 0.65rem */
+    gap: 4px;
+  }
+
+  .toggle-switch {
+    width: 26px;
+    height: 13px;
+  }
+
+  .toggle-knob {
+    width: 9px;
+    height: 9px;
+    top: 2px;
+    left: 2px;
+  }
+
+  .toggle-switch.toggled .toggle-knob {
+    transform: translateX(13px);
+  }
+}
+
+@media (max-width: 480px) {
+  .tariffs {
+    padding: 35px 12px;
+  }
+
+  .section-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .section-header p {
+    font-size: 0.9rem;
+  }
+
+  .tariff-card {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .btn-book-tariff {
+    font-size: 0.85rem; /* Adjusted to match 576px */
+    padding: 10px 24px;
+  }
+
+  .tariff-info {
+    padding: 14px; /* Slightly reduced */
+  }
+
+  .tariff-info h3 {
+    font-size: 1rem; /* Reduced from 1.2rem */
+  }
+
+  .price {
+    font-size: 1.4rem; /* Reduced from 1.5rem */
+  }
+
+  .per-unit {
+    font-size: 0.8rem; /* Reduced from 0.9rem */
+  }
+
+  .tariff-capacity {
+    font-size: 0.8rem; /* Reduced from 0.9rem */
+  }
+
+  .tariff-description {
+    font-size: 0.85rem; /* Reduced from 0.95rem */
+  }
+
+  .tariff-variable-pricing,
+  .tariff-extra-charges {
+    padding: 10px;
+  }
+
+  .tariff-variable-pricing h4,
+  .tariff-extra-charges h4,
+  .tariff-inclusions h4 {
+    font-size: 0.9rem; /* Reduced from 1rem */
+  }
+
+  .tariff-variable-pricing li,
+  .tariff-extra-charges li,
+  .tariff-inclusions li {
+    font-size: 0.8rem; /* Reduced from 0.9rem */
+    padding-left: 24px;
+  }
+
+  .tariff-variable-pricing li i,
+  .tariff-extra-charges li i,
+  .tariff-inclusions li i {
+    font-size: 0.9rem; /* Reduced from 1rem */
+  }
+
+  .tariff-timing {
+    font-size: 0.8rem; /* Reduced from 0.9rem */
+  }
+
+  .image-carousel {
+    height: 200px;
+  }
+}

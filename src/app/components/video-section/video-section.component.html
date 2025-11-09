@@ -1,0 +1,22 @@
+<!-- video-section.component.html -->
+<section class="video-section">
+  <div class="container">
+    <div class="video-content">
+      <div class="video-text">
+        <h2>{{ videoTitle }}</h2>
+        <p>{{ videoDescription }}</p>
+      </div>
+      <div class="video-container">
+        <iframe
+          [src]="videoUrl | safe: 'resourceUrl'"
+          title="Katwate's Resort Video"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+        >
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>

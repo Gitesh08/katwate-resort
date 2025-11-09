@@ -1,0 +1,108 @@
+<div class="no-bookings" *ngIf="guests.length === 0">
+  <p>No bookings today</p>
+</div>
+<table class="data-table" *ngIf="guests.length > 0">
+  <thead>
+    <tr>
+      <th><input type="checkbox" /></th>
+      <th>Booking ID</th>
+      <th>Guest Name</th>
+      <th>Room Number</th>
+      <th>Type Room</th>
+      <th>Checked In</th>
+      <th>Checked Out</th>
+      <th>Guest Status</th>
+      <th>Total Guests</th>
+      <th>Quick Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let guest of getPaginatedGuests()">
+      <td><input type="checkbox" /></td>
+      <td>{{ guest.id }}</td>
+      <td>
+        <div style="display: flex; align-items: center; gap: 10px">
+          <div class="avatar" [style.background-color]="guest.avatarColor">
+            <span>{{ getInitials(guest.name) }}</span>
+          </div>
+          <div>
+            <div>{{ guest.name }}</div>
+            <div style="color: #666; font-size: 0.8rem">{{ guest.email }}</div>
+          </div>
+        </div>
+      </td>
+      <td>{{ guest.roomNumber }}</td>
+      <td>{{ guest.roomType }}</td>
+      <td>{{ guest.checkIn }}</td>
+      <td>{{ guest.checkOut || "-" }}</td>
+      <td>
+        <span
+          class="status-indicator"
+          [ngClass]="{
+            'status-confirmed': guest.status === 'Confirmed',
+            'status-checked-out': guest.status === 'Checked Out',
+            'status-due': guest.status === 'Checked In',
+          }"
+        ></span
+        >{{ guest.status }}
+      </td>
+      <td>{{ guest.numberOfGuests }}</td>
+      <td>
+        <div class="action-buttons">
+          <div class="action-btn" (click)="onViewGuest(guest)">
+            <span class="material-icons">visibility</span>
+          </div>
+          <div class="action-btn" (click)="onEditGuest(guest)">
+            <span class="material-icons">edit</span>
+          </div>
+          <div class="action-btn" (click)="deleteGuest(guest.id)">
+            <span class="material-icons">delete</span>
+          </div>
+          <div
+            class="action-btn"
+            *ngIf="guest.status === 'Confirmed'"
+            (click)="onSendReminder(guest.id)"
+          >
+            <span class="material-icons">notifications</span>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div class="pagination" *ngIf="guests.length > 0">
+  <div class="page-info">
+    Showing {{ (currentPage - 1) * itemsPerPage + 1 }}-{{ displayItemsTo }} from
+    {{ guests.length }} data
+  </div>
+  <div class="page-numbers">
+    <div
+      class="page-number"
+      (click)="changePage(currentPage - 1)"
+      [class.disabled]="currentPage === 1"
+    >
+      <span class="material-icons">chevron_left</span>
+    </div>
+    <div
+      class="page-number"
+      *ngFor="let page of getPageNumbers()"
+      [class.active]="page === currentPage"
+      (click)="changePage(page)"
+    >
+      {{ page }}
+    </div>
+    <div
+      class="page-number"
+      (click)="changePage(currentPage + 1)"
+      [class.disabled]="currentPage === totalPages"
+    >
+      <span class="material-icons">chevron_right</span>
+    </div>
+  </div>
+</div>
+<app-notification-popup
+  [message]="notificationMessage"
+  [type]="notificationType"
+  [isVisible]="showNotificationPopup"
+  (closed)="closeNotificationPopup()"
+></app-notification-popup>
