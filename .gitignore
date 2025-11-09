@@ -44,5 +44,4 @@ Thumbs.db
 # Secrets
 /environments/environment.ts
 /environments/environment.prod.ts
-/environments/*
 .env
